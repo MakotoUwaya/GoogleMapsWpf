@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>物件一覧</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    var _map;
+    var _marker;
+    var _lat_lng;
+
+    function initMap() {
+        var latlng = new google.maps.LatLng(35.651857, 139.722186);
+        var opts = {
+            zoom: 17,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        _map = new google.maps.Map(document.getElementById("map"), opts);
+
+        _map.addListener('click',
+            function (e) {
+                getClickLatLng(e.latLng);
+            });
+
+        for (var i = 0; i < bukkens.length; i++) {
+            var bukken = bukkens[i];
+            var marker = new google.maps.Marker({
+                position: {lat: bukken[1], lng: bukken[2]},
+                map: _map,
+                title: bukken[0],
+                zIndex: bukken[3]
+            });
+        }
+    }
+
+    function getClickLatLng(lat_lng) {
+        _lat_lng = lat_lng;
+
+        if (_marker != undefined) {
+            _marker.setMap(null);
+        }
+        // マーカーを設置
+        _marker = new google.maps.Marker({
+            position: lat_lng,
+            map: _map
+        });
+    }
+
+    var bukkens = [
+        ['広尾駅前テラス', 35.652041, 139.722439, 1],
+        ['港ガーデン', 35.653159, 139.720662, 2],
+        ['広尾3丁目アパート', 35.653621, 139.724942, 3],
+        ['モノポリーマンション', 35.650480, 139.720931, 4],
+        ['トキワ荘', 35.652014, 139.722907, 5]
+
+    ];
+
+    google.maps.event.addDomListener(window, 'load', initMap);
+</script>
+<script async defer 
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+</script>
+</body>
+</html>
